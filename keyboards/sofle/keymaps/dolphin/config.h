@@ -4,3 +4,5 @@
 see https://docs.qmk.fm/#/feature_split_keyboard?id=setting-handedness
 for more options.
 */
+
+#define IGNORE_MOD_TAP_INTERRUPT
