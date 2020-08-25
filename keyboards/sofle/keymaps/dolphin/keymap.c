@@ -1,5 +1,30 @@
 #include QMK_KEYBOARD_H
 
+enum combos {
+    VC_LSBRACKET,
+    FD_LMBRACKET,
+    RE_LLBRACKET,
+    MCMA_RSBRACKET,
+    JK_RMBRACKET,
+    UI_RLBRACKET
+};
+
+const uint16_t PROGMEM vc_combo[] = {KC_V, KC_C, COMBO_END};
+const uint16_t PROGMEM fd_combo[] = {KC_F, KC_D, COMBO_END};
+const uint16_t PROGMEM re_combo[] = {KC_R, KC_E, COMBO_END};
+const uint16_t PROGMEM mcma_combo[] = {KC_M, KC_COMMA, COMBO_END};
+const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM ui_combo[] = {KC_U, KC_I, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+  [VC_LSBRACKET] = COMBO(vc_combo, LSFT(KC_9)),
+  [FD_LMBRACKET] = COMBO(fd_combo, KC_LBRACKET),
+  [RE_LLBRACKET] = COMBO(re_combo, LSFT(KC_LBRACKET)),
+  [MCMA_RSBRACKET] = COMBO(mcma_combo, LSFT(KC_0)),
+  [JK_RMBRACKET] = COMBO(jk_combo, KC_RBRACKET),
+  [UI_RLBRACKET] = COMBO(ui_combo, LSFT(KC_RBRACKET))
+};
+
 enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
     _QWERTY

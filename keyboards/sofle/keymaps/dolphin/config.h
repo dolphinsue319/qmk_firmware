@@ -6,3 +6,4 @@ for more options.
 */
 
 #define IGNORE_MOD_TAP_INTERRUPT
+#define COMBO_COUNT 6
