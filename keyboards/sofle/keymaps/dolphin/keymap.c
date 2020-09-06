@@ -3,24 +3,28 @@
 enum combos {
     FD_BASELAYER,
     VC_CPLAYER,
-    JK_ARRLAYER
+    JK_ARRLAYER,
+    JF_BRALAYER
 };
 
 const uint16_t PROGMEM fd_combo[] = {KC_F, KC_D, COMBO_END};
 const uint16_t PROGMEM vc_combo[] = {KC_V, KC_C, COMBO_END};
 const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM jf_combo[] = {KC_J, KC_F, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   [FD_BASELAYER] = COMBO(fd_combo, XXXXXXX),
   [VC_CPLAYER] = COMBO(vc_combo, XXXXXXX),
-  [JK_ARRLAYER] = COMBO(jk_combo, XXXXXXX)
+  [JK_ARRLAYER] = COMBO(jk_combo, XXXXXXX),
+  [JF_BRALAYER] = COMBO(jf_combo, XXXXXXX)
 };
 
 enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
     _QWERTY,
     CPLAYER,
-    ARROWLAYER
+    ARROWLAYER,
+    BRALAYER
 };
 
 enum custom_keycodes {
@@ -48,9 +52,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT( \
   KC_ESC,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  KC_GRV, \
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_NONUS_BSLASH, \
-  KC_LALT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN,  RALT_T(KC_BSPC), \
+  KC_LALT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN,  KC_BSPC, \
   LCTL(KC_SPC), KC_Z, KC_X,  KC_C,    KC_V,    KC_B, KC_MUTE,     RGUI(RCTL(KC_Q)), KC_N,  KC_M,    KC_COMM,  KC_DOT, KC_SLSH,  KC_CAPSLOCK, \
-  KC_UNDO, KC_LALT, KC_LCTRL, KC_LSHIFT, LCMD_T(KC_ENT),      RCMD_T(KC_SPC),  KC_RSHIFT, KC_RCTRL, KC_RALT, KC_RIGHT \
+  TO(_QWERTY), KC_LALT, KC_LCTRL, KC_LSHIFT, LCMD_T(KC_ENT),      RCMD_T(KC_SPC),  KC_RSHIFT, KC_RCTRL, KC_RALT, TO(_QWERTY) \
 ),
 [CPLAYER] = LAYOUT( \
   _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______,    _______,  _______, \
@@ -63,6 +67,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______,    _______,  _______, \
   _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    KC_UP,    _______,    _______,  _______, \
   _______,   _______,   _______,    _______,    _______,    _______,         _______,    KC_LEFT,    KC_DOWN,    KC_RIGHT, _______,  _______, \
+  _______, _______, _______,  _______,    _______,               _______, _______,     _______, _______,  _______,    _______,  _______, _______,  _______, \
+    _______, _______, _______, _______, _______,      _______,  _______, _______, _______, _______ \
+),
+[BRALAYER] = LAYOUT( \
+  _______,   _______,   _______,    _______,    _______,    _______,                                            _______,    _______,    _______,    _______,    _______,  _______, \
+  _______,   _______,   _______,    _______,    KC_LEFT_ANGLE_BRACKET,    _______,                              _______,    KC_RIGHT_ANGLE_BRACKET,    _______,    _______,    _______,  _______, \
+  _______,   _______,   KC_LEFT_CURLY_BRACE,    KC_LBRACKET,    KC_LEFT_PAREN,    _______,                      _______,    KC_RIGHT_PAREN,    KC_RBRACKET,    KC_RIGHT_CURLY_BRACE, _______,  _______, \
   _______, _______, _______,  _______,    _______,               _______, _______,     _______, _______,  _______,    _______,  _______, _______,  _______, \
     _______, _______, _______, _______, _______,      _______,  _______, _______, _______, _______ \
 )
@@ -101,10 +112,13 @@ static void print_status_narrow(void) {
             oled_write_P(PSTR("Base\n"), false);
             break;
         case CPLAYER:
-            oled_write_ln_P(PSTR("CP"), false);
+            oled_write_ln_P(PSTR("COPST"), false);
             break;
         case JK_ARRLAYER:
             oled_write_ln_P(PSTR("ARROW"), false);
+            break;
+        case JF_BRALAYER:
+            oled_write_ln_P(PSTR("BRACK"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
@@ -148,17 +162,24 @@ void process_combo_event(uint8_t combo_index, bool pressed) {
     case FD_BASELAYER:
         if (pressed) {
             layer_clear();
-            layer_on(_QWERTY);
+            // layer_move(_QWERTY);
         }
         break;
     case VC_CPLAYER:
         if (pressed) {
-            layer_on(CPLAYER);
+            layer_move(CPLAYER);
         }
+        break;
     case JK_ARRLAYER:
         if (pressed) {
-            layer_on(ARROWLAYER);
+            layer_move(ARROWLAYER);
         }
+        break;
+    case JF_BRALAYER:
+        if (pressed) {
+            layer_move(BRALAYER);
+        }
+        break;
     default:
         break;
     }
