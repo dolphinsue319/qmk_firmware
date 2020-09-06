@@ -1,40 +1,22 @@
 #include QMK_KEYBOARD_H
 
 enum combos {
-    VC_LSBRACKET,
-    FD_LMBRACKET,
-    RE_LLBRACKET,
-    MCMA_RSBRACKET,
-    JK_RMBRACKET,
-    UI_RLBRACKET,
-    FDS_BASELAYER,
-    VCX_LAYER
+    FD_BASELAYER,
+    VC_CPLAYER
 };
 
-const uint16_t PROGMEM vc_combo[] = {KC_V, KC_C, COMBO_END};
 const uint16_t PROGMEM fd_combo[] = {KC_F, KC_D, COMBO_END};
-const uint16_t PROGMEM re_combo[] = {KC_R, KC_E, COMBO_END};
-const uint16_t PROGMEM mcma_combo[] = {KC_M, KC_COMMA, COMBO_END};
-const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
-const uint16_t PROGMEM ui_combo[] = {KC_U, KC_I, COMBO_END};
-const uint16_t PROGMEM fds_combo[] = {KC_F, KC_D, KC_S, COMBO_END};
-const uint16_t PROGMEM vcx_combo[] = {KC_V, KC_C, KC_X, COMBO_END};
+const uint16_t PROGMEM vc_combo[] = {KC_V, KC_C, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
-  [VC_LSBRACKET] = COMBO(vc_combo, LSFT(KC_9)),
-  [FD_LMBRACKET] = COMBO(fd_combo, KC_LBRACKET),
-  [RE_LLBRACKET] = COMBO(re_combo, LSFT(KC_LBRACKET)),
-  [MCMA_RSBRACKET] = COMBO(mcma_combo, LSFT(KC_0)),
-  [JK_RMBRACKET] = COMBO(jk_combo, KC_RBRACKET),
-  [UI_RLBRACKET] = COMBO(ui_combo, LSFT(KC_RBRACKET)),
-  [FDS_BASELAYER] = COMBO(fds_combo, XXXXXXX),
-  [VCX_LAYER] = COMBO(vcx_combo, XXXXXXX)
+  [FD_BASELAYER] = COMBO(fd_combo, XXXXXXX),
+  [VC_CPLAYER] = COMBO(vc_combo, XXXXXXX)
 };
 
 enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
     _QWERTY,
-    LAYER1
+    CPLAYER
 };
 
 enum custom_keycodes {
@@ -64,13 +46,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_NONUS_BSLASH, \
   KC_LALT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN,  RALT_T(KC_BSPC), \
   LCTL(KC_SPC), KC_Z, KC_X,  KC_C,    KC_V,    KC_B, KC_MUTE,     RGUI(RCTL(KC_Q)), KC_N,  KC_M,    KC_COMM,  KC_DOT, KC_SLSH,  KC_CAPSLOCK, \
-    KC_UNDO, KC_LALT, KC_LCTRL, KC_LSHIFT, LCMD_T(KC_ENT),      RCMD_T(KC_SPC),  KC_RSHIFT, KC_RCTRL, KC_RALT, KC_RIGHT \
+  KC_UNDO, KC_LALT, KC_LCTRL, KC_LSHIFT, LCMD_T(KC_ENT),      RCMD_T(KC_SPC),  KC_RSHIFT, KC_RCTRL, KC_RALT, KC_RIGHT \
 ),
-[LAYER1] = LAYOUT( \
+[CPLAYER] = LAYOUT( \
   _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______,    _______,  _______, \
-  KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  _______, \
-  KC_LALT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN,  _______, \
-  LCTL(KC_SPC), LCMD(KC_Z), LCMD(KC_X),  LCMD(KC_C),    LCMD(KC_V),    KC_B, KC_MUTE,     RGUI(RCTL(KC_Q)), KC_N,  KC_M,    KC_COMM,  KC_DOT, KC_SLSH,  KC_CAPSLOCK, \
+  _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______,    _______,  _______, \
+  _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______, _______,  _______, \
+  _______, LCMD(KC_Z), LCMD(KC_X),  LCMD(KC_C),    LCMD(KC_V),               _______, _______,     _______, _______,  _______,    _______,  _______, _______,  _______, \
     _______, _______, _______, _______, _______,      _______,  _______, _______, _______, _______ \
 )
 };
@@ -89,14 +71,9 @@ static void render_logo(void) {
 
 static void print_status_narrow(void) {
     // Print current mode
-    oled_write_P(PSTR("\n\n"), false);
+    oled_write_P(PSTR("\n"), false);
     oled_write_ln_P(PSTR("MODE"), false);
     oled_write_ln_P(PSTR(""), false);
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_ln_P(PSTR("MAC"), false);
-    } else {
-        oled_write_ln_P(PSTR("WIN"), false);
-    }
 
     switch (get_highest_layer(default_layer_state)) {
         case _QWERTY:
@@ -112,8 +89,8 @@ static void print_status_narrow(void) {
         case _QWERTY:
             oled_write_P(PSTR("Base\n"), false);
             break;
-        case LAYER1:
-            oled_write_ln_P(PSTR("Layer 1"), false);
+        case CPLAYER:
+            oled_write_ln_P(PSTR("CP"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
@@ -154,15 +131,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void process_combo_event(uint8_t combo_index, bool pressed) {
     switch (combo_index)
     {
-    case FDS_BASELAYER:
+    case FD_BASELAYER:
         if (pressed) {
             layer_clear();
             layer_on(_QWERTY);
         }
         break;
-    case VCX_LAYER:
+    case VC_CPLAYER:
         if (pressed) {
-            layer_on(LAYER1);
+            layer_on(CPLAYER);
         }
     default:
         break;
