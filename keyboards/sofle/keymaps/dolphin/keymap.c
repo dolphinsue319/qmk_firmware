@@ -4,19 +4,23 @@ enum combos {
     FD_BASELAYER,
     VC_CPLAYER,
     JK_ARRLAYER,
-    JF_BRALAYER
+    JF_BRALAYER,
+    QU0_GRAVE
 };
 
 const uint16_t PROGMEM fd_combo[] = {KC_F, KC_D, COMBO_END};
 const uint16_t PROGMEM vc_combo[] = {KC_V, KC_C, COMBO_END};
 const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM jf_combo[] = {KC_J, KC_F, COMBO_END};
+const uint16_t PROGMEM qu0_combo[] = {KC_QUOTE, KC_0, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   [FD_BASELAYER] = COMBO(fd_combo, XXXXXXX),
   [VC_CPLAYER] = COMBO(vc_combo, XXXXXXX),
   [JK_ARRLAYER] = COMBO(jk_combo, XXXXXXX),
-  [JF_BRALAYER] = COMBO(jf_combo, XXXXXXX)
+  [JF_BRALAYER] = COMBO(jf_combo, XXXXXXX),
+  [QU0_GRAVE] = COMBO(qu0_combo, KC_GRAVE)
+
 };
 
 enum sofle_layers {
