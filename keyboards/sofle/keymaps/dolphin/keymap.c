@@ -2,21 +2,25 @@
 
 enum combos {
     FD_BASELAYER,
-    VC_CPLAYER
+    VC_CPLAYER,
+    JK_ARRLAYER
 };
 
 const uint16_t PROGMEM fd_combo[] = {KC_F, KC_D, COMBO_END};
 const uint16_t PROGMEM vc_combo[] = {KC_V, KC_C, COMBO_END};
+const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   [FD_BASELAYER] = COMBO(fd_combo, XXXXXXX),
-  [VC_CPLAYER] = COMBO(vc_combo, XXXXXXX)
+  [VC_CPLAYER] = COMBO(vc_combo, XXXXXXX),
+  [JK_ARRLAYER] = COMBO(jk_combo, XXXXXXX)
 };
 
 enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
     _QWERTY,
-    CPLAYER
+    CPLAYER,
+    ARROWLAYER
 };
 
 enum custom_keycodes {
@@ -53,6 +57,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______,    _______,  _______, \
   _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______, _______,  _______, \
   _______, LCMD(KC_Z), LCMD(KC_X),  LCMD(KC_C),    LCMD(KC_V),               _______, _______,     _______, _______,  _______,    _______,  _______, _______,  _______, \
+    _______, _______, _______, _______, _______,      _______,  _______, _______, _______, _______ \
+),
+[ARROWLAYER] = LAYOUT( \
+  _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    _______,    _______,    _______,  _______, \
+  _______,   _______,   _______,    _______,    _______,    _______,         _______,    _______,    KC_UP,    _______,    _______,  _______, \
+  _______,   _______,   _______,    _______,    _______,    _______,         _______,    KC_LEFT,    KC_DOWN,    KC_RIGHT, _______,  _______, \
+  _______, _______, _______,  _______,    _______,               _______, _______,     _______, _______,  _______,    _______,  _______, _______,  _______, \
     _______, _______, _______, _______, _______,      _______,  _______, _______, _______, _______ \
 )
 };
@@ -91,6 +102,9 @@ static void print_status_narrow(void) {
             break;
         case CPLAYER:
             oled_write_ln_P(PSTR("CP"), false);
+            break;
+        case JK_ARRLAYER:
+            oled_write_ln_P(PSTR("ARROW"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
@@ -140,6 +154,10 @@ void process_combo_event(uint8_t combo_index, bool pressed) {
     case VC_CPLAYER:
         if (pressed) {
             layer_on(CPLAYER);
+        }
+    case JK_ARRLAYER:
+        if (pressed) {
+            layer_on(ARROWLAYER);
         }
     default:
         break;
